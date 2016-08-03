@@ -10,7 +10,7 @@ Install the module like so:
 install commandbox-fusionreactor
 ```
 
-## Configuration
+# Configuration
 
 This will automatically add the JVM args into any server you start using the `server start` command.
 
@@ -21,7 +21,7 @@ fusionreactor register "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
 ```
 
 You can get a FusionReactor trial, or if you need to purchase a license, visit here:
-https://www.ortussolutions.com/products/fusion-reactor
+[https://www.ortussolutions.com/products/fusion-reactor](https://www.ortussolutions.com/products/fusion-reactor)
 
 ## Usage
 
