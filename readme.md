@@ -10,7 +10,7 @@ Install the module like so:
 install commandbox-fusionreactor
 ```
 
-# Configuration
+## Configuration
 
 This will automatically add the JVM args into any server you start using the `server start` command.
 
