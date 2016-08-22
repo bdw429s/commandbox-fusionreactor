@@ -1,8 +1,8 @@
 {
     "name":"CommandBox FusionReactor",
-    "version":"1.0.0",
+    "version":"message\"Added tray icon to open FR in browser\"",
     "author":"Brad Wood",
-    "location":"bdw429s/commandbox-fusionreactor#v1.0.0",
+    "location":"bdw429s/commandbox-fusionreactor#vmessage\"Added tray icon to open FR in browser\"",
     "directory":"",
     "createPackageDirectory":true,
     "packageDirectory":"",
