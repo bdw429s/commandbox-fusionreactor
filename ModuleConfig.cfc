@@ -29,9 +29,9 @@ component {
 				fileCopy( settings.jarPath, instanceJarpath );
 			}
 		
-			var FRPort = serverService.getRandomPort( serverInfo.host )
+			var FRPort = serverService.getRandomPort( serverInfo.host );
 						
-			serverInfo.JVMArgs &= ' -javaagent:"#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#"'
+			serverInfo.JVMArgs &= ' -javaagent:"#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#"';
 			
 			if( len( settings.licenseKey ) ) {
 				serverInfo.JVMArgs &= ' -Dfrlicense=#settings.licenseKey#';
@@ -40,6 +40,17 @@ component {
 			serverInfo.FRURL = 'http://#serverInfo.host#:#FRPort#';
 			consoleLogger.debug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
 			consoleLogger.debug( '.' );
+			
+			// Check for older version of CommandBox
+			if( serverInfo.keyExists( 'trayOptions' ) ) {
+				// Add FusionReactor menu item to tray icon.
+		    	serverInfo.trayOptions.append(
+					[
+						{ 'label':'Open FusionReactor', 'action':'openbrowser', 'url':serverInfo.FRURL }
+					],
+					true
+				);		
+			}
 			
 		}
 		
