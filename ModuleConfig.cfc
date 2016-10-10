@@ -46,7 +46,7 @@ component {
 				// Add FusionReactor menu item to tray icon.
 		    	serverInfo.trayOptions.append(
 					[
-						{ 'label':'Open FusionReactor', 'action':'openbrowser', 'url':serverInfo.FRURL }
+						{ 'label':'Open FusionReactor', 'action':'openbrowser', 'url':serverInfo.FRURL, 'image':'#modulePath#/fusion_reactor.png' }
 					],
 					true
 				);		
