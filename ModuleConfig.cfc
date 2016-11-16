@@ -3,7 +3,7 @@ component {
 	function configure() {
 		
 		settings = {
-			downloadURL = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-6.2.0/fusionreactor.jar',
+			downloadURL = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-6.2.5/fusionreactor.jar',
 			jarPath = modulePath & '/FR-home/fusionreactor.jar',
 			licenseKey = ''
 		};
