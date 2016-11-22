@@ -31,7 +31,7 @@ component {
 		
 			var FRPort = serverService.getRandomPort( serverInfo.host );
 						
-			serverInfo.JVMArgs &= ' -javaagent:"#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#"';
+			serverInfo.JVMArgs &= ' -javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#';
 			
 			if( len( settings.licenseKey ) ) {
 				serverInfo.JVMArgs &= ' -Dfrlicense=#settings.licenseKey#';
