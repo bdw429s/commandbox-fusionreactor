@@ -23,7 +23,7 @@ component {
 		
 		// Returns false if downloading fails.
 		if( ensureJarExists( consoleLogger ) ) {
-			var instanceJarpath = ( serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/fusionreactor.jar';
+			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/fusionreactor.jar';
 			if( !fileExists( instanceJarpath ) ) {
 				directoryCreate( getDirectoryFromPath( instanceJarpath ), true, true );
 				fileCopy( settings.jarPath, instanceJarpath );
@@ -31,7 +31,7 @@ component {
 		
 			var FRPort = serverService.getRandomPort( serverInfo.host );
 						
-			serverInfo.JVMArgs &= ' -javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#';
+			serverInfo.JVMArgs &= ' -javaagent:"#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#FRPort#"';
 			
 			if( len( settings.licenseKey ) ) {
 				serverInfo.JVMArgs &= ' -Dfrlicense=#settings.licenseKey#';
