@@ -25,7 +25,7 @@ component {
 		var defaults = configService.getSetting( 'server.defaults', {} );
 		
 		// Get all of our defaulted settings
-		serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: settings.FRPort;
+		serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
 		serverInfo.FRlicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
 		serverInfo.FRDownloadURL = serverJSON.fusionreactor.downloadURL ?: defaults.fusionreactor.downloadURL ?: settings.downloadURL;
 		serverInfo.FRJarPath = serverJSON.fusionreactor.jarPath ?: defaults.fusionreactor.jarPath ?: settings.jarPath;
