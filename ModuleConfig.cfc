@@ -34,8 +34,8 @@ component {
 		serverInfo.FRVersion = serverJSON.fusionreactor.version ?: defaults.fusionreactor.version ?: settings.version;
 		
 		// Swap out version placeholders, if they exist.
-		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{FRVersion}', serverInfo.FRVersion );
-		serverInfo.FRDownloadURL = serverInfo.FRDownloadURL.replaceNoCase( '{FRVersion}', serverInfo.FRVersion ); 
+		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{version}', serverInfo.FRVersion );
+		serverInfo.FRDownloadURL = serverInfo.FRDownloadURL.replaceNoCase( '{version}', serverInfo.FRVersion ); 
 		
 		// Returns false if downloading fails.
 		if( serverInfo.FREnable && ensureJarExists( consoleLogger, serverInfo.FRJarPath, serverInfo.FRDownloadURL ) ) {
