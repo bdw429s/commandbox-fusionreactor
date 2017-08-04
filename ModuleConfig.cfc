@@ -3,8 +3,9 @@ component {
 	function configure() {
 		
 		settings = {
-			downloadURL = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-6.2.8/fusionreactor.jar',
-			jarPath = modulePath & '/FR-home/fusionreactor-6.2.8.jar',
+			downloadURL = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-{version}/fusionreactor.jar',
+			jarPath = modulePath & '/FR-home/fusionreactor-{version}.jar',
+			version = '7.0.4',
 			licenseKey = '',
 			FRPort = '',
 			enable = true
@@ -12,7 +13,7 @@ component {
 				
 	}
 	
-	function onServerStart( required struct interceptData ) {
+	function onServerStart( required struct interceptData ) {		
 		var consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
 		var serverService = wirebox.getInstance( 'ServerService' );
 		var configService = wirebox.getInstance( 'ConfigService' );
@@ -30,6 +31,11 @@ component {
 		serverInfo.FRDownloadURL = serverJSON.fusionreactor.downloadURL ?: defaults.fusionreactor.downloadURL ?: settings.downloadURL;
 		serverInfo.FRJarPath = serverJSON.fusionreactor.jarPath ?: defaults.fusionreactor.jarPath ?: settings.jarPath;
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
+		serverInfo.FRVersion = serverJSON.fusionreactor.version ?: defaults.fusionreactor.version ?: settings.version;
+		
+		// Swap out version placeholders, if they exist.
+		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{FRVersion}', serverInfo.FRVersion );
+		serverInfo.FRDownloadURL = serverInfo.FRDownloadURL.replaceNoCase( '{FRVersion}', serverInfo.FRVersion ); 
 		
 		// Returns false if downloading fails.
 		if( serverInfo.FREnable && ensureJarExists( consoleLogger, serverInfo.FRJarPath, serverInfo.FRDownloadURL ) ) {
