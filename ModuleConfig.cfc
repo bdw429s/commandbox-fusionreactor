@@ -9,9 +9,18 @@ component {
 			version = '7.0.4',
 			licenseKey = '',
 			FRPort = '',
-			enable = true
+			password = '',
+			enable = true,
+			RESTRegisterURL = '',
+			RESTShutdownAction = '',
+			RESTRegisterHostname = '',
+			RESTRegisterGroup = '',
+			licenseDeactivateOnShutdown = '',
+			licenseLeaseTimeout = '',
+			cloudGroup = '',
+			requestObfuscateParameters = ''
 		};
-				
+		
 	}
 	
 	function onServerStart( required struct interceptData ) {		
@@ -33,6 +42,18 @@ component {
 		serverInfo.FRJarPath = serverJSON.fusionreactor.jarPath ?: defaults.fusionreactor.jarPath ?: settings.jarPath;
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
 		serverInfo.FRVersion = serverJSON.fusionreactor.version ?: defaults.fusionreactor.version ?: settings.version;
+		// Not putting this in serverInfo on purpose since it's potentially sensitive info
+		var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
+		
+		
+		serverInfo.FRRESTRegisterURL = serverJSON.fusionreactor.RESTRegisterURL ?: defaults.fusionreactor.RESTRegisterURL ?: settings.RESTRegisterURL;
+		serverInfo.FRRESTShutdownAction = serverJSON.fusionreactor.RESTShutdownAction ?: defaults.fusionreactor.RESTShutdownAction ?: settings.RESTShutdownAction;
+		serverInfo.FRRESTRegisterHostname = serverJSON.fusionreactor.RESTRegisterHostname ?: defaults.fusionreactor.RESTRegisterHostname ?: settings.RESTRegisterHostname;
+		serverInfo.FRRESTRegisterGroup = serverJSON.fusionreactor.RESTRegisterGroup ?: defaults.fusionreactor.RESTRegisterGroup ?: settings.RESTRegisterGroup;
+		serverInfo.FRLicenseDeactivateOnShutdown = serverJSON.fusionreactor.licenseDeactivateOnShutdown ?: defaults.fusionreactor.licenseDeactivateOnShutdown ?: settings.licenseDeactivateOnShutdown;
+		serverInfo.FRLicenseLeaseTimeout = serverJSON.fusionreactor.licenseLeaseTimeout ?: defaults.fusionreactor.licenseLeaseTimeout ?: settings.licenseLeaseTimeout;
+		serverInfo.FRCloudGroup = serverJSON.fusionreactor.cloudGroup ?: defaults.fusionreactor.cloudGroup ?: settings.cloudGroup;
+		serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
 		
 		// Swap out version placeholders, if they exist.
 		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{version}', serverInfo.FRVersion );
@@ -59,9 +80,16 @@ component {
 						
 			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#serverInfo.FRPort#"';
 			
-			if( len( serverInfo.FRlicenseKey ) ) {
-				serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#';
-			}
+			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
+			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfrregisterwith=#thisPassword#'; }
+			if( len( serverInfo.FRRESTRegisterURL ) ) { serverInfo.JVMArgs &= ' -Dfrregisterhostname=#serverInfo.FRRESTRegisterURL#'; }
+			if( len( serverInfo.FRRESTShutdownAction ) ) { serverInfo.JVMArgs &= ' -Dfrshutdownaction=#serverInfo.FRRESTShutdownAction#'; }
+			if( len( serverInfo.FRRESTRegisterHostname ) ) { serverInfo.JVMArgs &= ' -Dfrregisterhostname=#serverInfo.FRRESTRegisterHostname#'; }
+			if( len( serverInfo.FRRESTRegisterGroup ) ) { serverInfo.JVMArgs &= ' -Dfrregistergroup=#serverInfo.FRRESTRegisterGroup#'; }
+			if( len( serverInfo.FRLicenseDeactivateOnShutdown ) ) { serverInfo.JVMArgs &= ' -Dfrlicenseservice.deactivateOnShutdown=#serverInfo.FRLicenseDeactivateOnShutdown#'; }
+			if( len( serverInfo.FRLicenseLeaseTimeout ) ) { serverInfo.JVMArgs &= ' -Dfrlicenseservice.leasetime.hint=#serverInfo.FRLicenseLeaseTimeout#'; }
+			if( len( serverInfo.FRCloudGroup ) ) { serverInfo.JVMArgs &= ' -Dfr.cloud.group=#serverInfo.FRCloudGroup#'; }
+			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
 			
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
 			consoleLogger.debug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
