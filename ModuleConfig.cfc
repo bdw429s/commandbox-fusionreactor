@@ -27,6 +27,7 @@ component {
 		var consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
 		var serverService = wirebox.getInstance( 'ServerService' );
 		var configService = wirebox.getInstance( 'ConfigService' );
+		var systemSettings = wirebox.getInstance( 'SystemSettings' );
 		
 		var serverInfo = arguments.interceptData.serverInfo;
 		
@@ -34,6 +35,9 @@ component {
 		var serverJSON = serverService.readServerJSON( serverInfo.serverConfigFile ?: '' );
 		// Get defaults
 		var defaults = configService.getSetting( 'server.defaults', {} );
+		
+		systemSettings.expandDeepSystemSettings( serverJSON );
+		systemSettings.expandDeepSystemSettings( defaults );
 		
 		// Get all of our defaulted settings
 		serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
