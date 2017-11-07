@@ -1,8 +1,8 @@
 {
     "name":"CommandBox FusionReactor",
-    "version":"2.2.0",
+    "version":"2.3.0",
     "author":"Brad Wood",
-    "location":"bdw429s/commandbox-fusionreactor#v2.2.0",
+    "location":"bdw429s/commandbox-fusionreactor#v2.3.0",
     "directory":"",
     "createPackageDirectory":true,
     "packageDirectory":"",
@@ -36,18 +36,10 @@
             "URL":""
         }
     ],
-    "contributors":[
-        
-    ],
-    "dependencies":{
-        
-    },
-    "devDependencies":{
-        
-    },
-    "installPaths":{
-        
-    },
+    "contributors":[],
+    "dependencies":{},
+    "devDependencies":{},
+    "installPaths":{},
     "scripts":{
         "postVersion":"package set location='bdw429s/commandbox-fusionreactor#v`package version`'",
         "onRelease":"publish",
@@ -63,9 +55,7 @@
                 "default":""
             }
         ],
-        "labels":[
-            
-        ],
+        "labels":[],
         "reporter":"",
         "reporterResults":"",
         "bundles":[
@@ -75,13 +65,9 @@
             "mapping":"",
             "recurse":true
         },
-        "watchers":[
-            
-        ],
+        "watchers":[],
         "notify":{
-            "emails":[
-                
-            ],
+            "emails":[],
             "growl":"",
             "URL":""
         }
