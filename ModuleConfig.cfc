@@ -6,7 +6,7 @@ component {
 			// https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-7.0.4/debuglibs-7.0.4.zip
 			'downloadURL' = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-{version}/fusionreactor.jar',
 			'jarPath' = modulePath & '/FR-home/fusionreactor-{version}.jar',
-			'version' = '7.1.0',
+			'version' = '7.2.1',
 			'licenseKey' = '',
 			'FRPort' = '',
 			'password' = '',
