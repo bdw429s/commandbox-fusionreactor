@@ -23,8 +23,9 @@ component {
 		
 	}
 	
-	function onServerStart( required struct interceptData ) {		
-		var consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
+	function onServerStart( required struct interceptData ) {
+		jobEnabled = wirebox.getBinder().mappingExists( 'interactiveJob' );		
+		consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
 		var serverService = wirebox.getInstance( 'ServerService' );
 		var configService = wirebox.getInstance( 'ConfigService' );
 		var systemSettings = wirebox.getInstance( 'SystemSettings' );
@@ -64,13 +65,13 @@ component {
 		serverInfo.FRDownloadURL = serverInfo.FRDownloadURL.replaceNoCase( '{version}', serverInfo.FRVersion ); 
 		
 		// Returns false if downloading fails.
-		if( serverInfo.FREnable && ensureJarExists( consoleLogger, serverInfo.FRJarPath, serverInfo.FRDownloadURL ) ) {
+		if( serverInfo.FREnable && ensureJarExists( serverInfo.FRJarPath, serverInfo.FRDownloadURL ) ) {
 			
-			consoleLogger.debug( '.' );
-			consoleLogger.debug( '******************************************' );
-			consoleLogger.debug( '* CommandBox FusionReactor Module Loaded *' ); 
-			consoleLogger.debug( '******************************************' );
-			consoleLogger.debug( '.' );
+			logDebug( '.' );
+			logDebug( '******************************************' );
+			logDebug( '* CommandBox FusionReactor Module Loaded *' ); 
+			logDebug( '******************************************' );
+			logDebug( '.' );
 			
 			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/fusionreactor.jar';
 			
@@ -96,8 +97,8 @@ component {
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
 			
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
-			consoleLogger.debug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
-			consoleLogger.debug( '.' );
+			logDebug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
+			logDebug( '.' );
 			
 			// Check for older version of CommandBox
 			if( serverInfo.keyExists( 'trayOptions' ) ) {
@@ -114,11 +115,11 @@ component {
 		
 	}
 	
-	function ensureJarExists( consoleLogger, jarPath, downloadURL ) {
+	function ensureJarExists( jarPath, downloadURL ) {
 		
 		if( !fileExists( arguments.jarPath ) ) {
-			consoleLogger.warn( 'FusionReactor jar [#arguments.jarPath.listLast( "/" )#] not found.  Please wait for a moment while we download it.' );
-			consoleLogger.warn( 'Downloading [#downloadURL#]' );
+			logWarn( 'FusionReactor jar [#arguments.jarPath.listLast( "/" )#] not found.  Please wait for a moment while we download it.' );
+			logWarn( 'Downloading [#downloadURL#]' );
 			
 			var progressableDownloader = wirebox.getInstance( dsl='ProgressableDownloader');
 			var progressBar = wirebox.getInstance( dsl='ProgressBar');
@@ -132,17 +133,17 @@ component {
 					}
 				);
 							
-				consoleLogger.warn( 'Done, you''re all set!' );
+				logWarn( 'Done, you''re all set!' );
 								
 			} catch( Any var e ) {
 				consoleLogger.error( 'We''ve run into an issue downloading FusionReactor!' );
-				consoleLogger.error( '#e.message##chr( 10 )##e.detail#' );
-				consoleLogger.error( '.' );
-				consoleLogger.warn( 'If you don''t have an internet connection, please manually place the file here:' );
-				consoleLogger.warn( arguments.jarPath );
-				consoleLogger.error( '.' );
-				consoleLogger.debug( 'Continuing without FusionReactor.' );
-				consoleLogger.debug( '.' );
+				logError( '#e.message##chr( 10 )##e.detail#' );
+				logError( '.' );
+				logWarn( 'If you don''t have an internet connection, please manually place the file here:' );
+				logWarn( arguments.jarPath );
+				logError( '.' );
+				logDebug( 'Continuing without FusionReactor.' );
+				logDebug( '.' );
 				return false;
 			}
 			
@@ -150,6 +151,36 @@ component {
 				
 		return true;
 		
+	}
+	
+	private function logError( message ) {
+		if( jobEnabled ) {
+			if( message == '.' ) { return; }
+			var job = wirebox.getInstance( 'interactiveJob' );
+			job.addErrorLog( message );
+		} else {
+			consoleLogger.error( message );
+		}
+	}
+	
+	private function logWarn( message ) {
+		if( jobEnabled ) {
+			if( message == '.' ) { return; }
+			var job = wirebox.getInstance( 'interactiveJob' );
+			job.addWarnLog( message );
+		} else {
+			consoleLogger.warn( message );
+		}
+	}
+	
+	private function logDebug( message ) {
+		if( jobEnabled ) {
+			if( message == '.' ) { return; }
+			var job = wirebox.getInstance( 'interactiveJob' );
+			job.addLog( message );
+		} else {
+			consoleLogger.debug( message );
+		}
 	}
 	
 }
