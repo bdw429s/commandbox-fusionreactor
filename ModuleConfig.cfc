@@ -9,6 +9,7 @@ component {
 			'version' = '7.2.2',
 			'licenseKey' = '',
 			'FRPort' = '',
+			'FRHost' = '',
 			'password' = '',
 			'enable' = true,
 			'RESTRegisterURL' = '',
@@ -42,7 +43,8 @@ component {
 		
 		// Get all of our defaulted settings
 		serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
-		serverInfo.FRlicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
+		serverInfo.FRHost = serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
+		serverInfo.FRLicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
 		serverInfo.FRDownloadURL = serverJSON.fusionreactor.downloadURL ?: defaults.fusionreactor.downloadURL ?: settings.downloadURL;
 		serverInfo.FRJarPath = serverJSON.fusionreactor.jarPath ?: defaults.fusionreactor.jarPath ?: settings.jarPath;
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
@@ -82,8 +84,12 @@ component {
 			if( val( serverInfo.FRPort ) == 0 ) {
 				serverInfo.FRPort = serverService.getRandomPort( serverInfo.host );
 			}
+			var address = serverInfo.FRPort;
+			if( serverInfo.FRHost.len() ) {
+				address =  serverInfo.FRHost & ':' & serverInfo.FRPort;
+			}
 						
-			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#serverInfo.FRPort#"';
+			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#address#"';
 			
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
