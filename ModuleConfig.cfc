@@ -19,7 +19,8 @@ component {
 			'licenseDeactivateOnShutdown' = '',
 			'licenseLeaseTimeout' = '',
 			'cloudGroup' = '',
-			'requestObfuscateParameters' = ''
+			'requestObfuscateParameters' = '',
+			'defaultApplicationName' = ''
 		};
 		
 	}
@@ -61,6 +62,9 @@ component {
 		serverInfo.FRLicenseLeaseTimeout = serverJSON.fusionreactor.licenseLeaseTimeout ?: defaults.fusionreactor.licenseLeaseTimeout ?: settings.licenseLeaseTimeout;
 		serverInfo.FRCloudGroup = serverJSON.fusionreactor.cloudGroup ?: defaults.fusionreactor.cloudGroup ?: settings.cloudGroup;
 		serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
+		serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
+		
+		
 		
 		// Swap out version placeholders, if they exist.
 		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{version}', serverInfo.FRVersion );
@@ -101,6 +105,7 @@ component {
 			if( len( serverInfo.FRLicenseLeaseTimeout ) ) { serverInfo.JVMArgs &= ' -Dfrlicenseservice.leasetime.hint=#serverInfo.FRLicenseLeaseTimeout#'; }
 			if( len( serverInfo.FRCloudGroup ) ) { serverInfo.JVMArgs &= ' -Dfr.cloud.group=#serverInfo.FRCloudGroup#'; }
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
+			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' -Dfr.application.name=#serverInfo.FRDefaultApplicationName#'; }
 			
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
 			logDebug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
