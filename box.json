@@ -1,8 +1,8 @@
 {
     "name":"CommandBox FusionReactor",
-    "version":"2.4.6",
+    "version":"2.4.7",
     "author":"Brad Wood",
-    "location":"bdw429s/commandbox-fusionreactor#v2.4.6",
+    "location":"bdw429s/commandbox-fusionreactor#v2.4.7",
     "directory":"",
     "createPackageDirectory":true,
     "packageDirectory":"",
