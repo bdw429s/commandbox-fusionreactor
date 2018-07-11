@@ -20,7 +20,8 @@ component {
 			'licenseLeaseTimeout' = '',
 			'cloudGroup' = '',
 			'requestObfuscateParameters' = '',
-			'defaultApplicationName' = ''
+			'defaultApplicationName' = '',
+			'autoApplicationNaming' = ''
 		};
 		
 	}
@@ -63,6 +64,7 @@ component {
 		serverInfo.FRCloudGroup = serverJSON.fusionreactor.cloudGroup ?: defaults.fusionreactor.cloudGroup ?: settings.cloudGroup;
 		serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
 		serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
+		serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
 		
 		
 		
@@ -106,6 +108,7 @@ component {
 			if( len( serverInfo.FRCloudGroup ) ) { serverInfo.JVMArgs &= ' -Dfr.cloud.group=#serverInfo.FRCloudGroup#'; }
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
 			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' -Dfr.application.name=#serverInfo.FRDefaultApplicationName#'; }
+			if( len( serverInfo.FRAutoApplicationNaming ) ) { serverInfo.JVMArgs &= ' -Dfr.application.auto_naming=#serverInfo.FRAutoApplicationNaming#'; }
 			
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
 			logDebug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
