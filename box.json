@@ -41,9 +41,7 @@
     "devDependencies":{},
     "installPaths":{},
     "scripts":{
-        "postVersion":"package set location='bdw429s/commandbox-fusionreactor#v`package version`'",
-        "onRelease":"publish",
-        "postPublish":"!git push --follow-tags"
+        "postVersion":"package set location='bdw429s/commandbox-fusionreactor#v`package version`'"
     },
     "ignore":[
         "test",
