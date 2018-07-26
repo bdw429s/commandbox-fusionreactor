@@ -1,4 +1,6 @@
-﻿This module adds support to enable FusionReactor on the servers you start inside CommandBox.  
+[![Master Branch Build Status](https://img.shields.io/travis/bdw429s/commandbox-fusionreactor/master.svg?style=flat-square&label=master)](https://travis-ci.org/bdw429s/commandbox-fusionreactor)
+
+This module adds support to enable FusionReactor on the servers you start inside CommandBox.  
 
 ## Installation
 
