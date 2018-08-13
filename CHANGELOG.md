@@ -1,3 +1,11 @@
+# v2.4.11
+## 13 Aug 2018 — 19:51:23 UTC
+
+### other
+
++ __\*:__ Bump to version 7.4.1 ([db5b0bc](https://github.com/bdw429s/commandbox-fusionreactor//commit/db5b0bc7f4dabfe2820d4269ff8053412227d485))
+
+
 # v2.4.10
 ## 26 Jul 2018 — 23:01:32 UTC
 
