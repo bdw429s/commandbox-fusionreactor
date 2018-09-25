@@ -1,3 +1,11 @@
+# v2.4.13
+## 25 Sep 2018 — 21:28:49 UTC
+
+### other
+
++ __\*:__ Update key retrieval ([12f7499](https://github.com/bdw429s/commandbox-fusionreactor//commit/12f74990f628154bf60e7761e44f53c1dd2cb32d))
+
+
 # v2.4.12
 ## 25 Sep 2018 — 21:18:32 UTC
 
