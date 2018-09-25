@@ -1,3 +1,12 @@
+# v2.4.12
+## 25 Sep 2018 — 21:18:32 UTC
+
+### other
+
++ __\*:__ Merge pull request #10 from mbandizzle/patch-7 ([2d1df27](https://github.com/bdw429s/commandbox-fusionreactor//commit/2d1df27b6bf3c09f18d5a4717e791c0860dbe379))
++ __\*:__ Bump to 7.4.2 ([baa28ba](https://github.com/bdw429s/commandbox-fusionreactor//commit/baa28ba64dff2a56385c437d976c460d462bfda5))
+
+
 # v2.4.11
 ## 13 Aug 2018 — 19:51:23 UTC
 
