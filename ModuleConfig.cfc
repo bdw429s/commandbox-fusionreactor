@@ -158,6 +158,10 @@ component {
 				logError( '.' );
 				logDebug( 'Continuing without FusionReactor.' );
 				logDebug( '.' );
+				// Remove any partial download.
+				if( fileExists( arguments.jarPath ) ) {
+					fileDelete( arguments.jarPath );
+				}
 				return false;
 			}
 			
