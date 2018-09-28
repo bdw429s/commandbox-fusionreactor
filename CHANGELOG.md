@@ -1,3 +1,12 @@
+# v2.4.14
+## 28 Sep 2018 — 20:23:46 UTC
+
+### other
+
++ __\*:__ Fix for bad downloads
+ ([7649a7e](https://github.com/bdw429s/commandbox-fusionreactor//commit/7649a7e62b07ea718db3cb7f1419ab6a6921935d))
+
+
 # v2.4.13
 ## 25 Sep 2018 — 21:28:49 UTC
 
