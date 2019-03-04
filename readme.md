@@ -2,6 +2,11 @@
 
 This module adds support to enable FusionReactor on the servers you start inside CommandBox.  
 
+For full docs on this module, go here:
+https://commandbox.ortusbooks.com/embedded-server/fusionreactor
+
+For an overview of common settings and usage, read below.
+
 ## Installation
 
 Install the module like so:
