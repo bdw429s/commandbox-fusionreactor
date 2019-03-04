@@ -1,3 +1,12 @@
+# v3.0.1
+## 04 Mar 2019 — 16:58:11 UTC
+
+### other
+
++ __\*:__ Update readme to point to full docs
+ ([d6546ea](https://github.com/bdw429s/commandbox-fusionreactor//commit/d6546eabcc4673b12c1c9ab97a16e4f686697289))
+
+
 # v2.4.15
 ## 10 Oct 2018 — 21:18:24 UTC
 
