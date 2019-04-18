@@ -1,3 +1,12 @@
+# v4.0.1
+## 18 Apr 2019 — 18:11:19 UTC
+
+### other
+
++ __\*:__ Update changelog
+ ([1679b82](https://github.com/bdw429s/commandbox-fusionreactor//commit/1679b8204908e7698885affe7231394284db889c))
+
+
 # v3.0.2
 ## 04 Mar 2019 — 17:18:54 UTC
 
