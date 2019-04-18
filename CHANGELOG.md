@@ -1,3 +1,12 @@
+# v3.0.2
+## 04 Mar 2019 — 17:18:54 UTC
+
+### other
+
++ __\*:__ Formatting
+ ([e4e27fa](https://github.com/bdw429s/commandbox-fusionreactor//commit/e4e27fae785c6da9567f89575b5a32a8a7176098))
+
+
 # v3.0.1
 ## 04 Mar 2019 — 16:58:11 UTC
 
