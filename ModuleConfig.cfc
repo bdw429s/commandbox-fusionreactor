@@ -3,10 +3,8 @@ component {
 	function configure() {
 		
 		settings = {
-			// https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-7.0.4/debuglibs-7.0.4.zip
-			'downloadURL' = 'https://intergral-dl.s3.amazonaws.com/FR/FusionReactor-{version}/fusionreactor.jar',
-			'jarPath' = modulePath & '/FR-home/fusionreactor-{version}.jar',
-			'version' = '8.0.0',
+			'installID' = 'fusionreactor@^8.0.0',
+			'debugEnable' = true,
 			'licenseKey' = '',
 			'FRPort' = '',
 			'FRHost' = '',
@@ -43,37 +41,9 @@ component {
 		systemSettings.expandDeepSystemSettings( serverJSON );
 		systemSettings.expandDeepSystemSettings( defaults );
 		
-		// Get all of our defaulted settings
-		serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
-		serverInfo.FRHost = serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
-		serverInfo.FRLicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
-		serverInfo.FRDownloadURL = serverJSON.fusionreactor.downloadURL ?: defaults.fusionreactor.downloadURL ?: settings.downloadURL;
-		serverInfo.FRJarPath = serverJSON.fusionreactor.jarPath ?: defaults.fusionreactor.jarPath ?: settings.jarPath;
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
-		serverInfo.FRVersion = serverJSON.fusionreactor.version ?: defaults.fusionreactor.version ?: settings.version;
-		// Not putting this in serverInfo on purpose since it's potentially sensitive info
-		var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
 		
-		
-		serverInfo.FRRESTRegisterURL = serverJSON.fusionreactor.RESTRegisterURL ?: defaults.fusionreactor.RESTRegisterURL ?: settings.RESTRegisterURL;
-		serverInfo.FRRESTShutdownAction = serverJSON.fusionreactor.RESTShutdownAction ?: defaults.fusionreactor.RESTShutdownAction ?: settings.RESTShutdownAction;
-		serverInfo.FRRESTRegisterHostname = serverJSON.fusionreactor.RESTRegisterHostname ?: defaults.fusionreactor.RESTRegisterHostname ?: settings.RESTRegisterHostname;
-		serverInfo.FRRESTRegisterGroup = serverJSON.fusionreactor.RESTRegisterGroup ?: defaults.fusionreactor.RESTRegisterGroup ?: settings.RESTRegisterGroup;
-		serverInfo.FRLicenseDeactivateOnShutdown = serverJSON.fusionreactor.licenseDeactivateOnShutdown ?: defaults.fusionreactor.licenseDeactivateOnShutdown ?: settings.licenseDeactivateOnShutdown;
-		serverInfo.FRLicenseLeaseTimeout = serverJSON.fusionreactor.licenseLeaseTimeout ?: defaults.fusionreactor.licenseLeaseTimeout ?: settings.licenseLeaseTimeout;
-		serverInfo.FRCloudGroup = serverJSON.fusionreactor.cloudGroup ?: defaults.fusionreactor.cloudGroup ?: settings.cloudGroup;
-		serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
-		serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
-		serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
-		
-		
-		
-		// Swap out version placeholders, if they exist.
-		serverInfo.FRJarPath = serverInfo.FRJarPath.replaceNoCase( '{version}', serverInfo.FRVersion );
-		serverInfo.FRDownloadURL = serverInfo.FRDownloadURL.replaceNoCase( '{version}', serverInfo.FRVersion ); 
-		
-		// Returns false if downloading fails.
-		if( serverInfo.FREnable && ensureJarExists( serverInfo.FRJarPath, serverInfo.FRDownloadURL ) ) {
+		if( isBoolean( serverInfo.FREnable ) && serverInfo.FREnable ) {
 			
 			logDebug( '.' );
 			logDebug( '******************************************' );
@@ -81,12 +51,33 @@ component {
 			logDebug( '******************************************' );
 			logDebug( '.' );
 			
-			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/fusionreactor.jar';
+			// Get all of our defaulted settings
+			serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
+			serverInfo.FRHost = serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
+			serverInfo.FRLicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
+			serverInfo.FRInstallID = serverJSON.fusionreactor.installID ?: defaults.fusionreactor.installID ?: settings.installID;
+			serverInfo.FRDebugEnable = serverJSON.fusionreactor.debugEnable ?: defaults.fusionreactor.debugEnable ?: settings.debugEnable;
 			
-			// Copy every time, so new versions get automatically used. 
-			directoryCreate( getDirectoryFromPath( instanceJarpath ), true, true );
-			fileCopy( serverInfo.FRJarPath, instanceJarpath );
-
+			// Not putting this in serverInfo on purpose since it's potentially sensitive info
+			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
+			
+			
+			serverInfo.FRRESTRegisterURL = serverJSON.fusionreactor.RESTRegisterURL ?: defaults.fusionreactor.RESTRegisterURL ?: settings.RESTRegisterURL;
+			serverInfo.FRRESTShutdownAction = serverJSON.fusionreactor.RESTShutdownAction ?: defaults.fusionreactor.RESTShutdownAction ?: settings.RESTShutdownAction;
+			serverInfo.FRRESTRegisterHostname = serverJSON.fusionreactor.RESTRegisterHostname ?: defaults.fusionreactor.RESTRegisterHostname ?: settings.RESTRegisterHostname;
+			serverInfo.FRRESTRegisterGroup = serverJSON.fusionreactor.RESTRegisterGroup ?: defaults.fusionreactor.RESTRegisterGroup ?: settings.RESTRegisterGroup;
+			serverInfo.FRLicenseDeactivateOnShutdown = serverJSON.fusionreactor.licenseDeactivateOnShutdown ?: defaults.fusionreactor.licenseDeactivateOnShutdown ?: settings.licenseDeactivateOnShutdown;
+			serverInfo.FRLicenseLeaseTimeout = serverJSON.fusionreactor.licenseLeaseTimeout ?: defaults.fusionreactor.licenseLeaseTimeout ?: settings.licenseLeaseTimeout;
+			serverInfo.FRCloudGroup = serverJSON.fusionreactor.cloudGroup ?: defaults.fusionreactor.cloudGroup ?: settings.cloudGroup;
+			serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
+			serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
+			serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
+						
+			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
+			
+			// install FR jar and debug binaries
+			wirebox.getInstance( 'packageService' ).installPackage( id=serverInfo.FRInstallID, directory=instanceJarpath, save=false, saveDev=false );
+			
 			if( val( serverInfo.FRPort ) == 0 ) {
 				serverInfo.FRPort = serverService.getRandomPort( serverInfo.host );
 			}
@@ -95,7 +86,7 @@ component {
 				address =  serverInfo.FRHost & ':' & serverInfo.FRPort;
 			}
 						
-			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#=name=#serverInfo.name#,address=#address#"';
+			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#"';
 			
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
@@ -109,6 +100,18 @@ component {
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
 			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' -Dfr.application.name=#serverInfo.FRDefaultApplicationName#'; }
 			if( len( serverInfo.FRAutoApplicationNaming ) ) { serverInfo.JVMArgs &= ' -Dfr.application.auto_naming=#serverInfo.FRAutoApplicationNaming#'; }
+			
+			// Optionally add the debug libs
+			if( isBoolean( serverInfo.FRDebugEnable ) && serverInfo.FRDebugEnable ) {
+				var debugLib = 'frjvmti_x64.dll';
+				var fileSystemUtil = wirebox.getInstance( 'fileSystem' );
+				if( fileSystemUtil.isLinux() ) {
+					debugLib = 'libfrjvmti_x64.so';
+				} else if( fileSystemUtil.isMac() ) {
+					debugLib = 'libfrjvmti_x64.dylib';
+				}
+				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )##debugLib#"';
+			}
 			
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
 			logDebug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
@@ -126,48 +129,6 @@ component {
 			}
 			
 		}
-		
-	}
-	
-	function ensureJarExists( jarPath, downloadURL ) {
-		
-		if( !fileExists( arguments.jarPath ) ) {
-			logWarn( 'FusionReactor jar [#arguments.jarPath.listLast( "/" )#] not found.  Please wait for a moment while we download it.' );
-			logWarn( 'Downloading [#downloadURL#]' );
-			
-			var progressableDownloader = wirebox.getInstance( dsl='ProgressableDownloader');
-			var progressBar = wirebox.getInstance( dsl='ProgressBar');
-	
-			try {
-				progressableDownloader.download(
-					downloadURL,
-					arguments.jarPath,
-					function( status ) {
-						progressBar.update( argumentCollection = status );
-					}
-				);
-							
-				logWarn( 'Done, you''re all set!' );
-								
-			} catch( Any var e ) {
-				consoleLogger.error( 'We''ve run into an issue downloading FusionReactor!' );
-				logError( '#e.message##chr( 10 )##e.detail#' );
-				logError( '.' );
-				logWarn( 'If you don''t have an internet connection, please manually place the file here:' );
-				logWarn( arguments.jarPath );
-				logError( '.' );
-				logDebug( 'Continuing without FusionReactor.' );
-				logDebug( '.' );
-				// Remove any partial download.
-				if( fileExists( arguments.jarPath ) ) {
-					fileDelete( arguments.jarPath );
-				}
-				return false;
-			}
-			
-		}
-				
-		return true;
 		
 	}
 	
