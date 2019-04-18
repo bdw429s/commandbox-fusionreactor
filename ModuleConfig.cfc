@@ -57,11 +57,6 @@ component {
 			serverInfo.FRLicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
 			serverInfo.FRInstallID = serverJSON.fusionreactor.installID ?: defaults.fusionreactor.installID ?: settings.installID;
 			serverInfo.FRDebugEnable = serverJSON.fusionreactor.debugEnable ?: defaults.fusionreactor.debugEnable ?: settings.debugEnable;
-			
-			// Not putting this in serverInfo on purpose since it's potentially sensitive info
-			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
-			
-			
 			serverInfo.FRRESTRegisterURL = serverJSON.fusionreactor.RESTRegisterURL ?: defaults.fusionreactor.RESTRegisterURL ?: settings.RESTRegisterURL;
 			serverInfo.FRRESTShutdownAction = serverJSON.fusionreactor.RESTShutdownAction ?: defaults.fusionreactor.RESTShutdownAction ?: settings.RESTShutdownAction;
 			serverInfo.FRRESTRegisterHostname = serverJSON.fusionreactor.RESTRegisterHostname ?: defaults.fusionreactor.RESTRegisterHostname ?: settings.RESTRegisterHostname;
@@ -72,6 +67,9 @@ component {
 			serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
 			serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
 			serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
+						
+			// Not putting this in serverInfo on purpose since it's potentially sensitive info
+			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
 						
 			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
 			
@@ -103,13 +101,20 @@ component {
 			
 			// Optionally add the debug libs
 			if( isBoolean( serverInfo.FRDebugEnable ) && serverInfo.FRDebugEnable ) {
-				var debugLib = 'frjvmti_x64.dll';
+				logDebug( 'FusionReactor debug libs added.' );
 				var fileSystemUtil = wirebox.getInstance( 'fileSystem' );
+				
 				if( fileSystemUtil.isLinux() ) {
-					debugLib = 'libfrjvmti_x64.so';
+					logDebug( 'Linux detected for debug libs.' );
+					var debugLib = 'libfrjvmti_x64.so';
 				} else if( fileSystemUtil.isMac() ) {
-					debugLib = 'libfrjvmti_x64.dylib';
+					logDebug( 'Mac detected for debug libs.' );
+					var debugLib = 'libfrjvmti_x64.dylib';
+				} else {
+					logDebug( 'Windows detected for debug libs.' );
+					var debugLib = 'frjvmti_x64.dll';					
 				}
+				
 				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )##debugLib#"';
 			}
 			
