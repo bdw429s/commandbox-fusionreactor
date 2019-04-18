@@ -1,3 +1,12 @@
+# v4.0.2
+## 18 Apr 2019 — 22:25:54 UTC
+
+### other
+
++ __\*:__ Added a bit of debugging.
+ ([f385164](https://github.com/bdw429s/commandbox-fusionreactor//commit/f38516492306bdcc98615b04cd8559a0c85fb670))
+
+
 # v4.0.1
 ## 18 Apr 2019 — 18:11:19 UTC
 
