@@ -19,7 +19,8 @@ component {
 			'cloudGroup' = '',
 			'requestObfuscateParameters' = '',
 			'defaultApplicationName' = '',
-			'autoApplicationNaming' = ''
+			'autoApplicationNaming' = '',
+			'externalServerEnable' = false
 		};
 		
 	}
@@ -67,6 +68,8 @@ component {
 			serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
 			serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
 			serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
+			serverInfo.FRexternalServerEnable = serverJSON.fusionreactor.externalServerEnable ?: defaults.fusionreactor.externalServerEnable ?: settings.externalServerEnable;
+			
 						
 			// Not putting this in serverInfo on purpose since it's potentially sensitive info
 			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
@@ -84,7 +87,7 @@ component {
 				address =  serverInfo.FRHost & ':' & serverInfo.FRPort;
 			}
 						
-			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#"';
+			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
 			
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
