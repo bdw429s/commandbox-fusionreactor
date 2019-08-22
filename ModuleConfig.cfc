@@ -76,10 +76,10 @@ component {
 			// Not putting this in serverInfo on purpose since it's potentially sensitive info
 			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
 
-			var instanceJarpath = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
+			serverInfo.FRHomeDirectory = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
 
 			// install FR jar and debug binaries
-			wirebox.getInstance( 'packageService' ).installPackage( id=serverInfo.FRInstallID, directory=instanceJarpath, save=false, saveDev=false );
+			wirebox.getInstance( 'packageService' ).installPackage( id=serverInfo.FRInstallID, directory=serverInfo.FRHomeDirectory, save=false, saveDev=false );
 
 
 			serverInfo.FRreactorConfFile = '';
@@ -102,8 +102,8 @@ component {
 			if( len( serverInfo.FRreactorConfFile ) ) {
 				if( fileExists( serverInfo.FRreactorConfFile ) ) {
 					logDebug( 'Copying FusionReactor config file: [#serverInfo.FRreactorConfFile#]' );
-					directoryCreate( instanceJarpath & 'conf/', true, true );
-					fileCopy( serverInfo.FRreactorConfFile, instanceJarpath & 'conf/reactor.conf' );
+					directoryCreate( serverInfo.FRHomeDirectory & 'conf/', true, true );
+					fileCopy( serverInfo.FRreactorConfFile, serverInfo.FRHomeDirectory & 'conf/reactor.conf' );
 				} else {
 					logError( 'The reactorConfFile setting of [#serverInfo.FRreactorConfFile#] does not exist on disk.'  );
 				}
@@ -117,7 +117,7 @@ component {
 				address =  serverInfo.FRHost & ':' & serverInfo.FRPort;
 			}
 
-			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
+			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
 
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
@@ -148,7 +148,7 @@ component {
 					var debugLib = 'frjvmti_x64.dll';
 				}
 
-				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( instanceJarpath, '\', '\\', 'all' )##debugLib#"';
+				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )##debugLib#"';
 			}
 
 			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
