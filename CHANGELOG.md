@@ -1,3 +1,16 @@
+# v4.0.3
+## 22 Aug 2019 — 19:02:53 UTC
+
+### other
+
++ __\*:__ feat: update travis
+ ([fddbcaf](https://github.com/bdw429s/commandbox-fusionreactor//commit/fddbcafa1203725d1debb6f9ea756d4414c5fd9f))
++ __\*:__ feat: Allow external FR config file
+ ([0a38de2](https://github.com/bdw429s/commandbox-fusionreactor//commit/0a38de2eb10447ce1c39659e63e67fb6f5abdbcd))
++ __\*:__ Disable external FR port by default
+ ([32ba1ee](https://github.com/bdw429s/commandbox-fusionreactor//commit/32ba1ee511e06d923e4d70040cd986cfb1727a89))
+
+
 # v4.0.2
 ## 18 Apr 2019 — 22:25:54 UTC
 
