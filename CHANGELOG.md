@@ -1,3 +1,12 @@
+# v4.0.4
+## 22 Aug 2019 — 20:32:45 UTC
+
+### other
+
++ __\*:__ Add FR home to serverinfo
+ ([e76be65](https://github.com/bdw429s/commandbox-fusionreactor//commit/e76be65773000c4cd013b745a246497723273d72))
+
+
 # v4.0.3
 ## 22 Aug 2019 — 19:02:53 UTC
 
