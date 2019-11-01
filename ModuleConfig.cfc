@@ -78,8 +78,55 @@ component {
 
 			serverInfo.FRHomeDirectory = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
 
-			// install FR jar and debug binaries
-			wirebox.getInstance( 'packageService' ).installPackage( id=serverInfo.FRInstallID, directory=serverInfo.FRHomeDirectory, save=false, saveDev=false );
+			// Optimize installation for the default ForgeBox package
+			var endpointService = wirebox.getInstance( 'endpointService' );
+			var packageService = wirebox.getInstance( 'packageService' );
+			var semanticVersion = wirebox.getInstance( 'semanticVersion@semver' );
+			var endpointData = endpointService.resolveEndpoint( serverInfo.FRInstallID, 'fake' );
+			var skipInstall = false;
+			
+			// Are we installing the "fusionreactor" endpoint from ForgeBox
+			if( endpointData.endpointName == 'forgebox' && endpointData.endpoint.parseSlug( serverInfo.FRInstallID ) == 'fusionreactor'				
+				// the install directory exists and is already a package?  If not, assumptions do not apply
+				&& directoryExists( serverInfo.FRHomeDirectory ) && packageService.isPackage( serverInfo.FRHomeDirectory ) ) {
+					
+				// Let's take a look at wehat's already installed, making a few assumptions about how this specific pakage is setup.
+				var alreadyInstalledBoxJSON = packageService.readPackageDescriptor( serverInfo.FRHomeDirectory );
+				
+				// Is the package that is already installed fusionreactor?
+				if( alreadyInstalledBoxJSON.slug == 'fusionreactor' ) {
+					
+					// Do we have a pinned version, and that is what is installed
+					if( semanticVersion.isExactVersion( endpointData.endpoint.parseVersion( serverInfo.FRInstallID ) ) 
+						&& !semanticVersion.isNew( alreadyInstalledBoxJSON.version, endpointData.endpoint.parseVersion( serverInfo.FRInstallID ) ) ) {
+							
+						logDebug( 'Pinned FusionReactor version [#alreadyInstalledBoxJSON.version#] is already installed, skipping installation.' );
+						skipInstall = true;
+						
+					// We have a semver range, but FR has nothing newer
+					} else {
+					
+						try {
+							var updateData = endpointData.endpoint.getUpdate( 'fusionreactor', alreadyInstalledBoxJSON.version, true );
+							if( !updateData.isOutdated ) {
+								logDebug( 'Your FusionReactor version [#alreadyInstalledBoxJSON.version#] is already the latest, skipping installation.' );
+								logDebug( 'Pin an exact FusionReactor version to skip this Forgebox check.' );
+								skipInstall = true;	
+							}
+						} catch( endpointException var e ) {
+							logError( 'Error occurred while trying to check for updated ForgeBox version.' );
+							logError( e.message & ' ' & e.detail );
+						}
+					}
+					
+					
+				}
+			}
+			
+			if( !skipInstall ) {
+				// install FR jar and debug binaries
+				packageService.installPackage( id=serverInfo.FRInstallID, directory=serverInfo.FRHomeDirectory, save=false, saveDev=false );	
+			}
 
 
 			serverInfo.FRreactorConfFile = '';
