@@ -1,3 +1,12 @@
+# v4.0.5
+## 01 Nov 2019 — 18:00:39 UTC
+
+### other
+
++ __\*:__ Optimize FR downloads
+ ([ac43c52](https://github.com/bdw429s/commandbox-fusionreactor//commit/ac43c52290be6ca327404f1d33156a4eeb1dc635))
+
+
 # v4.0.4
 ## 22 Aug 2019 — 20:32:45 UTC
 
