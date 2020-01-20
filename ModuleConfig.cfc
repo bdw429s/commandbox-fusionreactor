@@ -169,7 +169,7 @@ component {
 			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
 
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
-			if( len( serverInfo.FRlicenseKeyHidden ) ) { serverInfo.JVMArgs &= ' -Dfr.license.key.hidden=#serverInfo.FRlicenseKeyHidden#'; }
+			if( isBoolean( serverInfo.FRlicenseKeyHidden ) && serverInfo.FRlicenseKeyHidden ) { serverInfo.JVMArgs &= ' -Dfr.license.key.hidden=#serverInfo.FRlicenseKeyHidden#'; }
 			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
 			if( len( serverInfo.FRRESTRegisterURL ) ) { serverInfo.JVMArgs &= ' -Dfrregisterwith=#serverInfo.FRRESTRegisterURL#'; }
 			if( len( serverInfo.FRRESTShutdownAction ) ) { serverInfo.JVMArgs &= ' -Dfrshutdownaction=#serverInfo.FRRESTShutdownAction#'; }
