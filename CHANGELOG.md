@@ -1,3 +1,15 @@
+# v4.0.6
+## 21 Jan 2020 — 20:31:21 UTC
+
+### other
+
++ __\*:__ Merge pull request #15 from iknowkungfoo/feature/hide-license-key ([1980775](https://github.com/bdw429s/commandbox-fusionreactor//commit/1980775ead472f11cb06217651a1ba352efea3c1))
++ __\*:__ Updates condition check.
+ ([6924c1c](https://github.com/bdw429s/commandbox-fusionreactor//commit/6924c1cd86ed8c17a0e95e7f4a8e6effcd6d520b))
++ __\*:__ Add setting to hide the license key from UI.
+ ([7c94238](https://github.com/bdw429s/commandbox-fusionreactor//commit/7c94238a51da692331561efa974d26f99779fc8d))
+
+
 # v4.0.5
 ## 01 Nov 2019 — 18:00:39 UTC
 
