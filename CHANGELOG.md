@@ -1,3 +1,12 @@
+# v4.0.7
+## 24 Aug 2020 — 18:59:20 UTC
+
+### other
+
++ __\*:__ handle space in server names
+ ([49683e8](https://github.com/bdw429s/commandbox-fusionreactor//commit/49683e8feac8703d0b920cdeee8e0edc7e16dacf))
+
+
 # v4.0.6
 ## 21 Jan 2020 — 20:31:21 UTC
 
