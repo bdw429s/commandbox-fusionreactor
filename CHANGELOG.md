@@ -1,3 +1,12 @@
+# v4.0.8
+## 24 Aug 2020 — 19:36:33 UTC
+
+### other
+
++ __\*:__ Force instance name to not have any spaces
+ ([ee9571a](https://github.com/bdw429s/commandbox-fusionreactor//commit/ee9571a460129e14ed4541a902a2c94a300a3985))
+
+
 # v4.0.7
 ## 24 Aug 2020 — 18:59:20 UTC
 
