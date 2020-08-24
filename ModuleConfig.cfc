@@ -170,16 +170,16 @@ component {
 
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( isBoolean( serverInfo.FRlicenseKeyHidden ) && serverInfo.FRlicenseKeyHidden ) { serverInfo.JVMArgs &= ' -Dfr.license.key.hidden=#serverInfo.FRlicenseKeyHidden#'; }
-			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' -Dfradminpassword=#thisPassword#'; }
-			if( len( serverInfo.FRRESTRegisterURL ) ) { serverInfo.JVMArgs &= ' -Dfrregisterwith=#serverInfo.FRRESTRegisterURL#'; }
+			if( len( thisPassword ) ) { serverInfo.JVMArgs &= ' "-Dfradminpassword=#thisPassword#"'; }
+			if( len( serverInfo.FRRESTRegisterURL ) ) { serverInfo.JVMArgs &= ' "-Dfrregisterwith=#serverInfo.FRRESTRegisterURL#"'; }
 			if( len( serverInfo.FRRESTShutdownAction ) ) { serverInfo.JVMArgs &= ' -Dfrshutdownaction=#serverInfo.FRRESTShutdownAction#'; }
 			if( len( serverInfo.FRRESTRegisterHostname ) ) { serverInfo.JVMArgs &= ' -Dfrregisterhostname=#serverInfo.FRRESTRegisterHostname#'; }
 			if( len( serverInfo.FRRESTRegisterGroup ) ) { serverInfo.JVMArgs &= ' -Dfrregistergroup=#serverInfo.FRRESTRegisterGroup#'; }
 			if( len( serverInfo.FRLicenseDeactivateOnShutdown ) ) { serverInfo.JVMArgs &= ' -Dfrlicenseservice.deactivateOnShutdown=#serverInfo.FRLicenseDeactivateOnShutdown#'; }
 			if( len( serverInfo.FRLicenseLeaseTimeout ) ) { serverInfo.JVMArgs &= ' -Dfrlicenseservice.leasetime.hint=#serverInfo.FRLicenseLeaseTimeout#'; }
-			if( len( serverInfo.FRCloudGroup ) ) { serverInfo.JVMArgs &= ' -Dfr.cloud.group=#serverInfo.FRCloudGroup#'; }
+			if( len( serverInfo.FRCloudGroup ) ) { serverInfo.JVMArgs &= ' "-Dfr.cloud.group=#serverInfo.FRCloudGroup#"'; }
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
-			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' -Dfr.application.name=#serverInfo.FRDefaultApplicationName#'; }
+			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' "-Dfr.application.name=#serverInfo.FRDefaultApplicationName#"'; }
 			if( len( serverInfo.FRAutoApplicationNaming ) ) { serverInfo.JVMArgs &= ' -Dfr.application.auto_naming=#serverInfo.FRAutoApplicationNaming#'; }
 
 			// Optionally add the debug libs
