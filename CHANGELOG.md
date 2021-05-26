@@ -1,3 +1,16 @@
+# v4.0.9
+## 26 May 2021 — 16:12:36 UTC
+
+### other
+
++ __\*:__ use java 11
+ ([a8df1a1](https://github.com/bdw429s/commandbox-fusionreactor//commit/a8df1a10ad1bcba273d34f08658b5dd8ed372822))
++ __\*:__ Use newer distro
+ ([446cdec](https://github.com/bdw429s/commandbox-fusionreactor//commit/446cdecea7a3985054b8c17a54221a83167bf78a))
++ __\*:__ Allow custom host for FR
+ ([3b96df8](https://github.com/bdw429s/commandbox-fusionreactor//commit/3b96df8f3addc85ef453d31e47951da0e35f8321))
+
+
 # v4.0.8
 ## 24 Aug 2020 — 19:36:33 UTC
 
