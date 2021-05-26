@@ -57,7 +57,7 @@ component {
 
 			// Get all of our defaulted settings
 			serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
-			serverInfo.FRHost = serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
+			serverInfo.FRHost = serverJSON.fusionreactor.host ?: defaults.fusionreactor.host ?: serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
 			serverInfo.FRLicenseKey = serverJSON.fusionreactor.licenseKey ?: defaults.fusionreactor.licenseKey ?: settings.licenseKey;
 			serverInfo.FRLicenseKeyHidden = serverJSON.fusionreactor.hideLicenseKey ?: defaults.fusionreactor.hideLicenseKey ?: settings.hideLicenseKey;
 			serverInfo.FRInstallID = serverJSON.fusionreactor.installID ?: defaults.fusionreactor.installID ?: settings.installID;
@@ -201,7 +201,7 @@ component {
 				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )##debugLib#"';
 			}
 
-			serverInfo.FRURL = 'http://#serverInfo.host#:#serverInfo.FRPort#';
+			serverInfo.FRURL = 'http://#serverInfo.FRHost#:#serverInfo.FRPort#';
 			logDebug( 'FusionReactor will be available at the URL #serverInfo.FRURL#' );
 			logDebug( '.' );
 
