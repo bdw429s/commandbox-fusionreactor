@@ -29,6 +29,8 @@ component {
 
 	function onServerStart( required struct interceptData ) {
 		jobEnabled = wirebox.getBinder().mappingExists( 'interactiveJob' );
+		
+		
 		consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
 		var serverService = wirebox.getInstance( 'ServerService' );
 		var configService = wirebox.getInstance( 'ConfigService' );
@@ -48,13 +50,12 @@ component {
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
 
 		if( isBoolean( serverInfo.FREnable ) && serverInfo.FREnable ) {
-
-			logDebug( '.' );
-			logDebug( '******************************************' );
-			logDebug( '* CommandBox FusionReactor Module Loaded *' );
-			logDebug( '******************************************' );
-			logDebug( '.' );
-
+	
+			if( jobEnabled ) {
+				var job = wirebox.getInstance( 'interactiveJob' );
+				job.start( 'Loading FusionReactor' );	
+			}
+			
 			// Get all of our defaulted settings
 			serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
 			serverInfo.FRHost = serverJSON.fusionreactor.host ?: defaults.fusionreactor.host ?: serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
@@ -216,7 +217,12 @@ component {
 				);
 			}
 
+			if( jobEnabled ) {
+	    		job.complete( interceptData.serverInfo.verbose );	
+			}
+			
 		}
+		
 
 	}
 
