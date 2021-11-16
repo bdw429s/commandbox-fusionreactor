@@ -1,73 +1,27 @@
 {
     "name":"CommandBox FusionReactor",
-    "version":"4.0.9",
+    "version":"4.0.10",
     "author":"Brad Wood",
-    "location":"bdw429s/commandbox-fusionreactor#v4.0.9",
-    "directory":"",
-    "createPackageDirectory":true,
-    "packageDirectory":"",
     "homepage":"https://github.com/bdw429s/commandbox-fusionreactor/",
     "documentation":"",
     "repository":{
         "type":"",
         "URL":"https://github.com/bdw429s/commandbox-fusionreactor/"
     },
-    "bugs":"",
     "slug":"commandbox-fusionreactor",
     "shortDescription":"Adds support to start your CommandBox servers with FusionReactor",
-    "description":"",
-    "instructions":"",
-    "changelog":"",
     "type":"commandbox-modules",
     "keywords":"fusionreactor,cfml,coldfusion,server,monitor",
-    "private":false,
-    "engines":[
-        {
-            "type":"",
-            "version":""
-        }
-    ],
-    "defaultEngine":"",
-    "defaultPort":0,
-    "projectURL":"",
-    "license":[
-        {
-            "type":"",
-            "URL":""
-        }
-    ],
     "contributors":[],
     "dependencies":{},
     "devDependencies":{},
     "installPaths":{},
     "scripts":{
-        "postVersion":"package set location='bdw429s/commandbox-fusionreactor#v`package version`'"
+        "postVersion":"publish",
+        "onRelease":"!git push --follow-tags"
     },
     "ignore":[
         "test",
         "tests"
-    ],
-    "testbox":{
-        "runner":[
-            {
-                "default":""
-            }
-        ],
-        "labels":[],
-        "reporter":"",
-        "reporterResults":"",
-        "bundles":[
-            ""
-        ],
-        "directory":{
-            "mapping":"",
-            "recurse":true
-        },
-        "watchers":[],
-        "notify":{
-            "emails":[],
-            "growl":"",
-            "URL":""
-        }
-    }
+    ]
 }
