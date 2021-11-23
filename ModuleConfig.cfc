@@ -218,7 +218,7 @@ component {
 			}
 
 			if( jobEnabled ) {
-	    		job.complete( interceptData.serverInfo.verbose );	
+	    		job.complete( interceptData.serverInfo.verbose ?: interceptData.serverInfo.debug );	
 			}
 			
 		}
