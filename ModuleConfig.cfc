@@ -39,12 +39,18 @@ component {
 
 		var serverInfo = arguments.interceptData.serverInfo;
 
-		// read server.json
-		var serverJSON = serverService.readServerJSON( serverInfo.serverConfigFile ?: '' );
+		// Newer versions of CommandBox have this
+		if( !isNull( interceptData.serverJSON ) ) {
+			var serverJSON = interceptData.serverJSON;
+		// Backwards compat for older versions
+		} else {
+			// read server.json
+			var serverJSON = serverService.readServerJSON( serverInfo.serverConfigFile ?: '' );
+			systemSettings.expandDeepSystemSettings( serverJSON );	
+		}
+		
 		// Get defaults
 		var defaults = configService.getSetting( 'server.defaults', {} );
-
-		systemSettings.expandDeepSystemSettings( serverJSON );
 		systemSettings.expandDeepSystemSettings( defaults );
 
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
