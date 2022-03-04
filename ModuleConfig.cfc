@@ -195,8 +195,17 @@ component {
 				var fileSystemUtil = wirebox.getInstance( 'fileSystem' );
 
 				if( fileSystemUtil.isLinux() ) {
-					logDebug( 'Linux detected for debug libs.' );
-					var debugLib = 'libfrjvmti_x64.so';
+					var systemSettings = wirebox.getInstance( 'SystemSettings' );
+					var ARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_aarch64.so';
+					if( fileExists( ARMDebuggerLibPath ) && 
+						( systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' ) ) ) {
+						logDebug( 'Linux ARM detected for debug libs.' );
+						var debugLib = 'libfrjvmti_aarch64.so';
+					} else {
+						logDebug( 'Linux detected for debug libs.' );
+						var debugLib = 'libfrjvmti_x64.so';	
+					}
+					
 				} else if( fileSystemUtil.isMac() ) {
 					logDebug( 'Mac detected for debug libs.' );
 					var debugLib = 'libfrjvmti_x64.dylib';
