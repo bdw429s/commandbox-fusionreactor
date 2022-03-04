@@ -197,24 +197,32 @@ component {
 				if( fileSystemUtil.isLinux() ) {
 					var systemSettings = wirebox.getInstance( 'SystemSettings' );
 					var ARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_aarch64.so';
-					if( fileExists( ARMDebuggerLibPath ) && 
-						( systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' ) ) ) {
-						logDebug( 'Linux ARM detected for debug libs.' );
-						var debugLib = 'libfrjvmti_aarch64.so';
+					var debugLib = '';
+					
+					if( systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' ) ) {
+						if( fileExists( ARMDebuggerLibPath ) ) {
+							logDebug( 'Linux ARM detected for debug libs.' );
+							debugLib = 'libfrjvmti_aarch64.so';	
+						} else {
+							logDebug( 'Linux ARM detected, but no lib available.  Disabling FR debugger.' );
+						}
 					} else {
 						logDebug( 'Linux detected for debug libs.' );
-						var debugLib = 'libfrjvmti_x64.so';	
+						debugLib = 'libfrjvmti_x64.so';	
 					}
 					
 				} else if( fileSystemUtil.isMac() ) {
 					logDebug( 'Mac detected for debug libs.' );
-					var debugLib = 'libfrjvmti_x64.dylib';
+					debugLib = 'libfrjvmti_x64.dylib';
 				} else {
 					logDebug( 'Windows detected for debug libs.' );
-					var debugLib = 'frjvmti_x64.dll';
+					debugLib = 'frjvmti_x64.dll';
+				}
+				
+				if( len( debugLib ) ) {
+					serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )##debugLib#"';
 				}
 
-				serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )##debugLib#"';
 			}
 
 			serverInfo.FRURL = 'http://#serverInfo.FRHost#:#serverInfo.FRPort#';
