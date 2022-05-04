@@ -194,13 +194,16 @@ component {
 				logDebug( 'FusionReactor debug libs added.' );
 				var fileSystemUtil = wirebox.getInstance( 'fileSystem' );
 
+				var isArm = ()=>systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' );
+				
 				if( fileSystemUtil.isLinux() ) {
 					var systemSettings = wirebox.getInstance( 'SystemSettings' );
-					var ARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_aarch64.so';
+					var LinuxARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_aarch64.so';
+					
 					var debugLib = '';
 					
-					if( systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' ) ) {
-						if( fileExists( ARMDebuggerLibPath ) ) {
+					if( isArm() ) {
+						if( fileExists( LinuxARMDebuggerLibPath ) ) {
 							logDebug( 'Linux ARM detected for debug libs.' );
 							debugLib = 'libfrjvmti_aarch64.so';	
 						} else {
@@ -212,8 +215,20 @@ component {
 					}
 					
 				} else if( fileSystemUtil.isMac() ) {
-					logDebug( 'Mac detected for debug libs.' );
-					debugLib = 'libfrjvmti_x64.dylib';
+					var MacARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_arm64.dylib';
+					
+					if( isArm() ) {
+						if( fileExists( MacARMDebuggerLibPath ) ) {
+							logDebug( 'Mac ARM detected for debug libs.' );
+							debugLib = 'libfrjvmti_arm64.dylib';	
+						} else {
+							logDebug( 'Mac ARM detected, but no lib available.  Disabling FR debugger.' );
+						}
+					} else {
+						logDebug( 'Mac detected for debug libs.' );
+						debugLib = 'libfrjvmti_x64.dylib';	
+					}
+					
 				} else {
 					logDebug( 'Windows detected for debug libs.' );
 					debugLib = 'frjvmti_x64.dll';
