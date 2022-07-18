@@ -22,7 +22,14 @@ component {
 			'requestObfuscateParameters' = '',
 			'defaultApplicationName' = '',
 			'autoApplicationNaming' = '',
-			'externalServerEnable' = false
+			'externalServerEnable' = false,
+			'EDSEnable' = false,
+			'EDSListen' = '',
+			'EDSPollTimeout' = '', 
+			'EDSMaxDataSize' = '',
+			'EDSTarget' = '',
+			'EDSGroups' = '',
+			'ChatEnabled' = true
 		};
 
 	}
@@ -80,6 +87,13 @@ component {
 			serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
 			serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
 			serverInfo.FRexternalServerEnable = serverJSON.fusionreactor.externalServerEnable ?: defaults.fusionreactor.externalServerEnable ?: settings.externalServerEnable;
+			serverInfo.FREdDsEnable = serverJSON.fusionreactor.EDSEnable ?: defaults.fusionreactor.EDSEnable ?: settings.EDSEnable;
+			serverInfo.FREdDsListen = serverJSON.fusionreactor.EDSListen ?: defaults.fusionreactor.EDSListen ?: settings.EDSListen;
+			serverInfo.FREdDsPolltimeout = serverJSON.fusionreactor.EDSPollTimeout ?: defaults.fusionreactor.EDSPollTimeout ?: settings.EDSPollTimeout;
+			serverInfo.FREdDsMaxdatasize = serverJSON.fusionreactor.EDSMaxDataSize ?: defaults.fusionreactor.EDSMaxDataSize ?: settings.EDSMaxDataSize;
+			serverInfo.FREdDsTarget = serverJSON.fusionreactor.EDSTarget ?: defaults.fusionreactor.EDSTarget ?: settings.EDSTarget;
+			serverInfo.FREdDsGroups = serverJSON.fusionreactor.EDSGroups ?: defaults.fusionreactor.EDSGroups ?: settings.EDSGroups;
+			serverInfo.FRChatEnabled = serverJSON.fusionreactor.ChatEnabled ?: defaults.fusionreactor.ChatEnabled ?: settings.ChatEnabled;
 
 
 			// Not putting this in serverInfo on purpose since it's potentially sensitive info
@@ -188,6 +202,13 @@ component {
 			if( len( serverInfo.FRRequestObfuscateParameters ) ) { serverInfo.JVMArgs &= ' -Dfr.request.obfuscate.parameters=#serverInfo.FRRequestObfuscateParameters#'; }
 			if( len( serverInfo.FRDefaultApplicationName ) ) { serverInfo.JVMArgs &= ' "-Dfr.application.name=#serverInfo.FRDefaultApplicationName#"'; }
 			if( len( serverInfo.FRAutoApplicationNaming ) ) { serverInfo.JVMArgs &= ' -Dfr.application.auto_naming=#serverInfo.FRAutoApplicationNaming#'; }
+			if( len( serverInfo.FREdDsEnable ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.enable=#serverInfo.FREdDsEnable#'; }
+			if( len( serverInfo.FREdDsListen ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.listen=#serverInfo.FREdDsListen#'; }
+			if( len( serverInfo.FREdDsPolltimeout ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.polltimeout=#serverInfo.FREdDsPolltimeout#'; }
+			if( len( serverInfo.FREdDsMaxdatasize ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.maxdatasize=#serverInfo.FREdDsMaxdatasize#'; }
+			if( len( serverInfo.FREdDsTarget ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.target=#serverInfo.FREdDsTarget#'; }
+			if( len( serverInfo.FREdDsGroups ) ) { serverInfo.JVMArgs &= ' -Dfr.ed.ds.groups=#serverInfo.FREdDsGroups#'; }
+			if( len( serverInfo.FRChatEnabled ) ) { serverInfo.JVMArgs &= ' -Dfr.chat.enabled=#serverInfo.FRChatEnabled#'; }
 
 			// Optionally add the debug libs
 			if( isBoolean( serverInfo.FRDebugEnable ) && serverInfo.FRDebugEnable ) {
