@@ -3,7 +3,7 @@ component {
 	function configure() {
 
 		settings = {
-			'installID' = 'fusionreactor@^8.0.0',
+			'installID' = 'fusionreactor@^9.0.0',
 			'debugEnable' = true,
 			'licenseKey' = '',
 			'hideLicenseKey' = false,
@@ -22,10 +22,11 @@ component {
 			'requestObfuscateParameters' = '',
 			'defaultApplicationName' = '',
 			'autoApplicationNaming' = '',
+			'serverName' = '',
 			'externalServerEnable' = false,
 			'EDSEnable' = false,
 			'EDSListen' = '',
-			'EDSPollTimeout' = '', 
+			'EDSPollTimeout' = '',
 			'EDSMaxDataSize' = '',
 			'EDSTarget' = '',
 			'EDSGroups' = '',
@@ -36,8 +37,8 @@ component {
 
 	function onServerStart( required struct interceptData ) {
 		jobEnabled = wirebox.getBinder().mappingExists( 'interactiveJob' );
-		
-		
+
+
 		consoleLogger = wirebox.getInstance( dsl='logbox:logger:console' );
 		var serverService = wirebox.getInstance( 'ServerService' );
 		var configService = wirebox.getInstance( 'ConfigService' );
@@ -53,9 +54,9 @@ component {
 		} else {
 			// read server.json
 			var serverJSON = serverService.readServerJSON( serverInfo.serverConfigFile ?: '' );
-			systemSettings.expandDeepSystemSettings( serverJSON );	
+			systemSettings.expandDeepSystemSettings( serverJSON );
 		}
-		
+
 		// Get defaults
 		var defaults = configService.getSetting( 'server.defaults', {} );
 		systemSettings.expandDeepSystemSettings( defaults );
@@ -63,12 +64,12 @@ component {
 		serverInfo.FREnable = serverJSON.fusionreactor.enable ?: defaults.fusionreactor.enable ?: settings.enable;
 
 		if( isBoolean( serverInfo.FREnable ) && serverInfo.FREnable ) {
-	
+
 			if( jobEnabled ) {
 				var job = wirebox.getInstance( 'interactiveJob' );
-				job.start( 'Loading FusionReactor' );	
+				job.start( 'Loading FusionReactor' );
 			}
-			
+
 			// Get all of our defaulted settings
 			serverInfo.FRPort = serverJSON.fusionreactor.port ?: defaults.fusionreactor.port ?: serverInfo.FRPort ?: settings.FRPort;
 			serverInfo.FRHost = serverJSON.fusionreactor.host ?: defaults.fusionreactor.host ?: serverJSON.web.host ?: defaults.web.host ?: serverInfo.host ?: settings.host;
@@ -86,6 +87,11 @@ component {
 			serverInfo.FRRequestObfuscateParameters = serverJSON.fusionreactor.requestObfuscateParameters ?: defaults.fusionreactor.requestObfuscateParameters ?: settings.requestObfuscateParameters;
 			serverInfo.FRDefaultApplicationName = serverJSON.fusionreactor.defaultApplicationName ?: defaults.fusionreactor.defaultApplicationName ?: serverInfo.name;
 			serverInfo.FRAutoApplicationNaming = serverJSON.fusionreactor.autoApplicationNaming ?: defaults.fusionreactor.autoApplicationNaming ?: settings.autoApplicationNaming;
+			serverInfo.FRServerName = serverJSON.fusionreactor.serverName ?: defaults.fusionreactor.serverName ?: settings.serverName;
+			if( !len( serverInfo.FRServerName ) ) {
+				serverInfo.FRServerName = serverInfo.name.replace( ' ', '', 'all' );
+			}
+
 			serverInfo.FRexternalServerEnable = serverJSON.fusionreactor.externalServerEnable ?: defaults.fusionreactor.externalServerEnable ?: settings.externalServerEnable;
 			serverInfo.FREdDsEnable = serverJSON.fusionreactor.EDSEnable ?: defaults.fusionreactor.EDSEnable ?: settings.EDSEnable;
 			serverInfo.FREdDsListen = serverJSON.fusionreactor.EDSListen ?: defaults.fusionreactor.EDSListen ?: settings.EDSListen;
@@ -107,48 +113,48 @@ component {
 			var semanticVersion = wirebox.getInstance( 'semanticVersion@semver' );
 			var endpointData = endpointService.resolveEndpoint( serverInfo.FRInstallID, 'fake' );
 			var skipInstall = false;
-			
+
 			// Are we installing the "fusionreactor" endpoint from ForgeBox
-			if( endpointData.endpointName == 'forgebox' && endpointData.endpoint.parseSlug( serverInfo.FRInstallID ) == 'fusionreactor'				
+			if( endpointData.endpointName == 'forgebox' && endpointData.endpoint.parseSlug( serverInfo.FRInstallID ) == 'fusionreactor'
 				// the install directory exists and is already a package?  If not, assumptions do not apply
 				&& directoryExists( serverInfo.FRHomeDirectory ) && packageService.isPackage( serverInfo.FRHomeDirectory ) ) {
-					
+
 				// Let's take a look at wehat's already installed, making a few assumptions about how this specific pakage is setup.
 				var alreadyInstalledBoxJSON = packageService.readPackageDescriptor( serverInfo.FRHomeDirectory );
-				
+
 				// Is the package that is already installed fusionreactor?
 				if( alreadyInstalledBoxJSON.slug == 'fusionreactor' ) {
-					
+
 					// Do we have a pinned version, and that is what is installed
-					if( semanticVersion.isExactVersion( endpointData.endpoint.parseVersion( serverInfo.FRInstallID ) ) 
+					if( semanticVersion.isExactVersion( endpointData.endpoint.parseVersion( serverInfo.FRInstallID ) )
 						&& !semanticVersion.isNew( alreadyInstalledBoxJSON.version, endpointData.endpoint.parseVersion( serverInfo.FRInstallID ) ) ) {
-							
+
 						logDebug( 'Pinned FusionReactor version [#alreadyInstalledBoxJSON.version#] is already installed, skipping installation.' );
 						skipInstall = true;
-						
+
 					// We have a semver range, but FR has nothing newer
 					} else {
-					
+
 						try {
 							var updateData = endpointData.endpoint.getUpdate( 'fusionreactor', alreadyInstalledBoxJSON.version, true );
 							if( !updateData.isOutdated ) {
 								logDebug( 'Your FusionReactor version [#alreadyInstalledBoxJSON.version#] is already the latest, skipping installation.' );
 								logDebug( 'Pin an exact FusionReactor version to skip this Forgebox check.' );
-								skipInstall = true;	
+								skipInstall = true;
 							}
 						} catch( endpointException var e ) {
 							logError( 'Error occurred while trying to check for updated ForgeBox version.' );
 							logError( e.message & ' ' & e.detail );
 						}
 					}
-					
-					
+
+
 				}
 			}
-			
+
 			if( !skipInstall ) {
 				// install FR jar and debug binaries
-				packageService.installPackage( id=serverInfo.FRInstallID, directory=serverInfo.FRHomeDirectory, save=false, saveDev=false );	
+				packageService.installPackage( id=serverInfo.FRInstallID, directory=serverInfo.FRHomeDirectory, save=false, saveDev=false );
 			}
 
 
@@ -187,7 +193,7 @@ component {
 				address =  serverInfo.FRHost & ':' & serverInfo.FRPort;
 			}
 
-			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.name.replace( ' ', '', 'all' )#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
+			serverInfo.JVMArgs &= ' "-javaagent:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )#fusionreactor.jar=name=#serverInfo.FRServerName#,address=#address#,external=#serverInfo.FRexternalServerEnable#"';
 
 			if( len( serverInfo.FRlicenseKey ) ) { serverInfo.JVMArgs &= ' -Dfrlicense=#serverInfo.FRlicenseKey#'; }
 			if( isBoolean( serverInfo.FRlicenseKeyHidden ) && serverInfo.FRlicenseKeyHidden ) { serverInfo.JVMArgs &= ' -Dfr.license.key.hidden=#serverInfo.FRlicenseKeyHidden#'; }
@@ -216,45 +222,45 @@ component {
 				var fileSystemUtil = wirebox.getInstance( 'fileSystem' );
 
 				var isArm = ()=>systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'arm' ) || systemSettings.getSystemSetting( 'os.arch', '' ).findNoCase( 'aarch' );
-				
+
 				if( fileSystemUtil.isLinux() ) {
 					var systemSettings = wirebox.getInstance( 'SystemSettings' );
 					var LinuxARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_aarch64.so';
-					
+
 					var debugLib = '';
-					
+
 					if( isArm() ) {
 						if( fileExists( LinuxARMDebuggerLibPath ) ) {
 							logDebug( 'Linux ARM detected for debug libs.' );
-							debugLib = 'libfrjvmti_aarch64.so';	
+							debugLib = 'libfrjvmti_aarch64.so';
 						} else {
 							logDebug( 'Linux ARM detected, but no lib available.  Disabling FR debugger.' );
 						}
 					} else {
 						logDebug( 'Linux detected for debug libs.' );
-						debugLib = 'libfrjvmti_x64.so';	
+						debugLib = 'libfrjvmti_x64.so';
 					}
-					
+
 				} else if( fileSystemUtil.isMac() ) {
 					var MacARMDebuggerLibPath = serverInfo.FRHomeDirectory & '/libfrjvmti_arm64.dylib';
-					
+
 					if( isArm() ) {
 						if( fileExists( MacARMDebuggerLibPath ) ) {
 							logDebug( 'Mac ARM detected for debug libs.' );
-							debugLib = 'libfrjvmti_arm64.dylib';	
+							debugLib = 'libfrjvmti_arm64.dylib';
 						} else {
 							logDebug( 'Mac ARM detected, but no lib available.  Disabling FR debugger.' );
 						}
 					} else {
 						logDebug( 'Mac detected for debug libs.' );
-						debugLib = 'libfrjvmti_x64.dylib';	
+						debugLib = 'libfrjvmti_x64.dylib';
 					}
-					
+
 				} else {
 					logDebug( 'Windows detected for debug libs.' );
 					debugLib = 'frjvmti_x64.dll';
 				}
-				
+
 				if( len( debugLib ) ) {
 					serverInfo.JVMArgs &= ' "-agentpath:#replaceNoCase( serverInfo.FRHomeDirectory, '\', '\\', 'all' )##debugLib#"';
 				}
@@ -277,11 +283,11 @@ component {
 			}
 
 			if( jobEnabled ) {
-	    		job.complete( interceptData.serverInfo.verbose ?: interceptData.serverInfo.debug );	
+	    		job.complete( interceptData.serverInfo.verbose ?: interceptData.serverInfo.debug );
 			}
-			
+
 		}
-		
+
 
 	}
 
