@@ -3,7 +3,7 @@ component {
 	function configure() {
 
 		settings = {
-			'installID' = 'fusionreactor@^9.0.0',
+			'installID' = 'fusionreactor@^10.0.0',
 			'debugEnable' = true,
 			'licenseKey' = '',
 			'hideLicenseKey' = false,
