@@ -105,7 +105,11 @@ component {
 			// Not putting this in serverInfo on purpose since it's potentially sensitive info
 			var thisPassword = serverJSON.fusionreactor.password ?: defaults.fusionreactor.password ?: settings.password;
 
-			serverInfo.FRHomeDirectory = ( serverInfo.serverHomeDirectory ?: serverInfo.serverHome ?: serverInfo.webConfigDir & '/' & replace( serverInfo.cfengine, '@', '-' ) ) & '/fusionreactor/';
+			serverInfo.FRHomeDirectory = serverInfo.serverHomeDirectory;
+			if( !(  serverInfo.FRHomeDirectory.endsWith( '/' ) || serverInfo.FRHomeDirectory.endsWith( '\' ) ) ) {
+				serverInfo.FRHomeDirectory &= '/';
+			}
+			serverInfo.FRHomeDirectory &= 'fusionreactor/';
 
 			// Optimize installation for the default ForgeBox package
 			var endpointService = wirebox.getInstance( 'endpointService' );
