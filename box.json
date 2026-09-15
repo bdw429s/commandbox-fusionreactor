@@ -1,26 +1,26 @@
 {
-    "name":"CommandBox FusionReactor",
-    "version":"6.0.0",
-    "author":"Brad Wood",
-    "homepage":"https://github.com/bdw429s/commandbox-fusionreactor/",
-    "documentation":"",
-    "repository":{
-        "type":"",
-        "URL":"https://github.com/bdw429s/commandbox-fusionreactor/"
+    "name": "CommandBox FusionReactor",
+    "version": "7.0.0",
+    "author": "Brad Wood",
+    "homepage": "https://github.com/bdw429s/commandbox-fusionreactor/",
+    "documentation": "https://commandbox.ortusbooks.com/embedded-server/fusionreactor",
+    "repository": {
+        "type": "",
+        "URL": "https://github.com/bdw429s/commandbox-fusionreactor/"
     },
-    "slug":"commandbox-fusionreactor",
-    "shortDescription":"Adds support to start your CommandBox servers with FusionReactor",
-    "type":"commandbox-modules",
-    "keywords":"fusionreactor,cfml,coldfusion,server,monitor",
-    "contributors":[],
-    "dependencies":{},
-    "devDependencies":{},
-    "installPaths":{},
-    "scripts":{
-        "postVersion":"publish",
-        "onRelease":"!git push --follow-tags"
+    "slug": "commandbox-fusionreactor",
+    "shortDescription": "Adds support to start your CommandBox servers with FusionReactor",
+    "type": "commandbox-modules",
+    "keywords": "fusionreactor,cfml,coldfusion,server,monitor",
+    "contributors": [],
+    "dependencies": {},
+    "devDependencies": {},
+    "installPaths": {},
+    "scripts": {
+        "postVersion": "publish",
+        "onRelease": "!git push --follow-tags"
     },
-    "ignore":[
+    "ignore": [
         "test",
         "tests"
     ]
